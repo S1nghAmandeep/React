@@ -1,24 +1,27 @@
-import { useState, useCallback , memo } from 'react';
+import { useState, useCallback } from "react";
+import Button from "./Button";
 
 function Prova() {
   const [count, setCount] = useState(0);
+  const [name, setName] = useState("Clicked ");
 
   // Senza `useCallback`, questa funzione verrebbe ricreata ad ogni render
   const handleClick = useCallback(() => {
-    setCount(count + 1);
+    setCount((prev) => {
+      const newValue = prev + 1;
+      if (prev % 2 === 0) {
+        setName(`clicked even ${prev + 1} times`);
+      }
+      return newValue;
+    });
   }, []);
 
   return (
     <div>
       <h1>Contatore: {count}</h1>
-      <Child onClick={handleClick} />
+      <Button clicked={name} onClick={handleClick} />
     </div>
   );
 }
-
-const Child = memo(function Child({ onClick }) {
-  console.log("Render Child");
-  return <button onClick={onClick}>Aumenta Contatore</button>;
-})
 
 export default Prova;
